@@ -17,6 +17,7 @@ class BasicAuth(Auth):
     inherits from Auth
     """
     User = TypeVar("User")
+
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
         """
