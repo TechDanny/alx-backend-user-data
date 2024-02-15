@@ -8,13 +8,15 @@ from .auth import Auth
 import re
 import base64
 import binascii
-from typing import Tuple
+from typing import Tuple, TypeVar
+from models.user import User
 
 
 class BasicAuth(Auth):
     """
     inherits from Auth
     """
+    User = TypeVar("User")
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
         """
@@ -62,3 +64,19 @@ class BasicAuth(Auth):
                 passwd = fieldMatch.group('password')
                 return user, passwd
         return None, None
+
+    def user_object_from_credentials(self, user_email: str,
+                                     user_pwd: str) -> User:
+        """
+        returns the User instance based on his email and password.
+        """
+        if type(user_email) == str and type(user_pwd) == str:
+            try:
+                user = User.search({'email': user_email})
+            except Exception:
+                return None
+            if len(user) <= 0:
+                return None
+            if user[0].is_valid_password(user_pwd):
+                return user[0]
+        return None
