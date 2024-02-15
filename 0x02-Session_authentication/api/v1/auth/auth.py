@@ -7,6 +7,7 @@ Auth class
 from flask import request
 from typing import List, TypeVar
 import fnmatch
+from os import getenv
 
 
 User = TypeVar('User')
@@ -41,4 +42,14 @@ class Auth:
     def current_user(self, request=None) -> User:
         """ returns None - request will be the Flask request object
         """
+        return None
+
+    def session_cookie(self, request=None):
+        """
+        returns a cookie value from a request:
+        """
+        if request is not None:
+            return request.cookies.get(getenv('SESSION_NAME',
+                                              '_my_session_id'))
+
         return None
