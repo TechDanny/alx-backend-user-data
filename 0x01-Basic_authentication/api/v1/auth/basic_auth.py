@@ -55,9 +55,9 @@ class BasicAuth(Auth):
         returns the user email and password from the Base64 decoded value
         """
         if type(decoded_base64_authorization_header) == str:
-            pattern = r'(?P<user>[^:]+):(?P<password>.+)'
+            passwd_pattern = r'(?P<user>[^:]+):(?P<password>.+)'
             fieldMatch = re.fullmatch(
-                pattern,
+                passwd_pattern,
                 decoded_base64_authorization_header.strip(),
             )
             if fieldMatch is not None:
