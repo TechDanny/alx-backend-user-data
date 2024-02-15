@@ -3,10 +3,13 @@
 Empty session
 """
 
-
+from flask import jsonify, request, abort
+from api.v1.views import app_views
 from api.v1.auth.auth import Auth
 import uuid
 from models.user import User
+from os import getenv
+from api.v1.app import auth
 
 
 class SessionAuth(Auth):
@@ -14,6 +17,7 @@ class SessionAuth(Auth):
      inherits from Auth
     """
     user_id_by_session_id = {}
+    session_name = getenv('SESSION_NAME', '_my_session_id')
 
     def create_session(self, user_id: str = None) -> str:
         """
@@ -48,3 +52,21 @@ class SessionAuth(Auth):
                 return User.get(user_id)
 
         return None
+
+    def destroy_session(self, request=None) -> bool:
+        """
+        deletes the user session / logout:.
+        """
+        if request is None:
+            return False
+
+        session_id = self.session_cookie(request)
+        if not session_id:
+            return False
+
+        user_id = self.user_id_for_session_id(session_id)
+        if not user_id:
+            return False
+
+        del self.user_id_by_session_id[session_id]
+        return True
