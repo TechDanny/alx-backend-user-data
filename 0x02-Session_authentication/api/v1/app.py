@@ -10,7 +10,6 @@ import os
 from api.v1.auth.auth import Auth
 from api.v1.auth.basic_auth import BasicAuth
 from api.v1.auth.session_auth import SessionAuth
-from api.v1.auth.session_exp_auth import SessionExpAuth
 
 
 app = Flask(__name__)
@@ -25,7 +24,8 @@ elif auth_type == 'basic_auth':
     auth = BasicAuth()
 elif auth_type == 'session_auth':
     auth = SessionAuth()
-elif auth_type == 'session_exp_auth':
+else:
+    from api.v1.auth.session_exp_auth import SessionExpAuth
     auth = SessionExpAuth()
 
 
