@@ -58,6 +58,4 @@ class DB:
             raise e
         except InvalidRequestError as e:
             raise e
-        finally:
-            if self.__session is not None and self.__session.is_active:
-                self.__session.close()
+        return reslt
