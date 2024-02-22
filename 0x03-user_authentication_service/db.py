@@ -53,7 +53,6 @@ class DB:
         try:
             query = session.query(User).filter_by(**kwargs)
             reslt = query.one()
-            return reslt
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
