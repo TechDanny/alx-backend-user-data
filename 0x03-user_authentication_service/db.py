@@ -46,7 +46,7 @@ class DB:
     def find_user_by(self, **kwargs) -> User:
         """
         returns the first row found in the users
-        table as filtered by the method’s input arguments.
+        table as filtered by the method input arguments.
         """
         session = self._session
         try:
