@@ -9,6 +9,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from user import Base
 from user import User
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 
 class DB:
@@ -41,3 +43,21 @@ class DB:
         self._session.commit()
 
         return user
+
+    def find_user_by(self, **kwargs) -> User:
+        """
+        returns the first row found in the users
+        table as filtered by the method’s input arguments.
+        """
+        session = self._session
+        try:
+            query = session.query(User).filter_by(**kwargs)
+            reslt = query.one()
+            return reslt
+        except NoResultFound as e:
+            raise e
+        except InvalidRequestError as e:
+            raise e
+        finally:
+            if self.__session is not None and self.__session.is_active:
+                self.__session.close()
